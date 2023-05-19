@@ -61,6 +61,10 @@ export function renderPostsPageComponent({ appEl }) {
   for (let likeEl of document.querySelectorAll(".like-button")) {
     likeEl.addEventListener('click', () => {
       console.log(likeEl.dataset.postLike);
+      if(!user) {
+        alert('Лайкать посты могут только авторизованные пользователи');
+        return;
+      }
       if (likeEl.dataset.postLike === 'false') {
         addLike({ postID: likeEl.dataset.postId, token: `Bearer ${user.token}` })
           .then(() => goToPage(undefined, 'like'))
