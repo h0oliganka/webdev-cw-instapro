@@ -2,6 +2,8 @@ import { USER_POSTS_PAGE } from "../routes.js";
 import { renderHeaderComponent } from "./header-component.js";
 import { posts, goToPage, user } from "../index.js";
 import { addLike, removeLike } from "../api.js";
+import { formatDistanceToNow } from 'date-fns';
+import { enGB, eo, ru } from 'date-fns/locale';
 
 export function renderPostsPageComponent({ appEl }) {
   // TODO: реализовать рендер постов из api
@@ -23,7 +25,7 @@ export function renderPostsPageComponent({ appEl }) {
       </button>
       <p class="post-likes-text">
       ${post.likes.length < 1 ?
-          `Нравится: <strong> ${post.likes.length}</strong>` : post.likes.length === 1 ?
+        `Нравится: <strong> ${post.likes.length}</strong>` : post.likes.length === 1 ?
           `Нравится: <strong> ${post.likes[0].name} </strong>` :
           `Нравится: <strong> ${post.likes[Math.floor(Math.random() * ((post.likes.length - 1) - 0 + 1)) + 0].name} и еще ${post.likes.length - 1}</strong>`} 
       </p>
@@ -33,40 +35,40 @@ export function renderPostsPageComponent({ appEl }) {
       ${post.description}
     </p>
     <p class="post-date">
-
+    ${formatDistanceToNow(new Date(post.createdAt), { locale: ru },)} назад
     </p>
   </li>`
-    }).join('');
-    const appHtml = `
+  }).join('');
+  const appHtml = `
                 <div class="page-container">
                   <div class="header-container"></div>
                   <ul class="posts">
                   ${postList}
                   </ul>
                 </div>`;
-    appEl.innerHTML = appHtml;
-    renderHeaderComponent({
-      element: document.querySelector(".header-container"),
-    });
-    for (let userEl of document.querySelectorAll(".post-header")) {
-      userEl.addEventListener("click", () => {
-        goToPage(USER_POSTS_PAGE, {
-          userId: userEl.dataset.userId,
-        });
+  appEl.innerHTML = appHtml;
+  renderHeaderComponent({
+    element: document.querySelector(".header-container"),
+  });
+  for (let userEl of document.querySelectorAll(".post-header")) {
+    userEl.addEventListener("click", () => {
+      goToPage(USER_POSTS_PAGE, {
+        userId: userEl.dataset.userId,
       });
-    }
-  
-    for (let likeEl of document.querySelectorAll(".like-button")) {
-      likeEl.addEventListener('click', () => {
-        console.log(likeEl.dataset.postLike);
-        if (likeEl.dataset.postLike === 'false') {
-          addLike({ postID: likeEl.dataset.postId, token: `Bearer ${user.token}` })
-            .then(() => goToPage(undefined, 'like'))
-        } else {
-          removeLike({ postID: likeEl.dataset.postId, token: `Bearer ${user.token}` })
-            .then(() => goToPage(undefined, 'like'))
-        }
-  
-      })
-    }
+    });
   }
+
+  for (let likeEl of document.querySelectorAll(".like-button")) {
+    likeEl.addEventListener('click', () => {
+      console.log(likeEl.dataset.postLike);
+      if (likeEl.dataset.postLike === 'false') {
+        addLike({ postID: likeEl.dataset.postId, token: `Bearer ${user.token}` })
+          .then(() => goToPage(undefined, 'like'))
+      } else {
+        removeLike({ postID: likeEl.dataset.postId, token: `Bearer ${user.token}` })
+          .then(() => goToPage(undefined, 'like'))
+      }
+
+    })
+  }
+}
