@@ -8,23 +8,20 @@ export function renderUploadImageComponent({ element, onImageUrlChange }) {
   <div class="upload=image">
       ${
         imageUrl
-          ? `
-          <div class="file-upload-image-conrainer">
+          ? 
+          `<div class="file-upload-image-conrainer">
             <img class="file-upload-image" src="${imageUrl}">
             <button class="file-upload-remove-button button">Заменить фото</button>
-          </div>
-          `
-          : `
-            <label class="file-upload-label secondary-button">
+          </div>`
+          : 
+          `<label class="file-upload-label secondary-button">
                 <input
                   type="file"
                   class="file-upload-input"
                   style="display:none"
                 />
                 Выберите фото
-            </label>
-          
-      `
+            </label>`
       }
   </div>
 `;
@@ -39,7 +36,7 @@ export function renderUploadImageComponent({ element, onImageUrlChange }) {
         lableEl.textContent = "Загружаю файл...";
         uploadImage({ file }).then(({ fileUrl }) => {
           imageUrl = fileUrl;
-           //onImageUrlChange(imageUrl);
+          // onImageUrlChange(imageUrl);
           render();
         });
       }
@@ -49,7 +46,7 @@ export function renderUploadImageComponent({ element, onImageUrlChange }) {
       .querySelector(".file-upload-remove-button")
       ?.addEventListener("click", () => {
         imageUrl = "";
-        //onImageUrlChange(imageUrl);
+        // onImageUrlChange(imageUrl);
         render();
       });
   };
