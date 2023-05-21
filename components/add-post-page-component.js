@@ -30,35 +30,36 @@ ${!imgFileUrl ? `<div class="upload=image">
     </div>
   `;
 
-    appEl.innerHTML = appHtml;
+  appEl.innerHTML = appHtml;
 
-    renderHeaderComponent({
-      element: document.querySelector(".header-container"),
-    });
-    !imgFileUrl ? undefined : document.querySelector('.file-upload-remove-button').addEventListener('click', () => {
-      imgFileUrl = null;
-      render();
-      initFileInputElement();
-    })
-
-    document.getElementById("add-button").addEventListener("click", () => {
-      onAddPostClick({
-        description: document.querySelector('.textarea').value,
-        imageUrl: imgFileUrl,
-      });
-      imgFileUrl = null;
-    });
-  };
-  render();
-  initFileInputElement();
-  function initFileInputElement() {
-    const fileInputElement = document.querySelector('.file-upload-input');
-    fileInputElement.addEventListener('input', () => {
-      uploadImage({ file: fileInputElement.files[0] })
-        .then((response) => {
-          imgFileUrl = response.fileUrl;
-          render();
-        })
-    });
+  renderHeaderComponent({
+  element: document.querySelector(".header-container"),
+  });
+  
+  renderUploadImageComponent({
+  element: document.querySelector(".upload-image-container"),
+  });
+  
+  document.getElementById("add-button").addEventListener("click", () => {
+  
+  if(document.querySelector('.textarea').value==''){
+  alert('Не заполнено описание фото');
+  return;
   }
-}
+  if(document.querySelector('.file-upload-image')==null){
+  alert('Добавьте фото');
+  return;
+  }
+  document.querySelector('.textarea').value = document.querySelector('.textarea').value.replaceAll("&", "&amp;")
+  .replaceAll("<", "&lt;").replaceAll(">", "&gt;");
+  
+  onAddPostClick({
+  description: document.querySelector('.textarea').value,
+  imageUrl: document.querySelector('.file-upload-image').src,
+  });
+  });
+  };
+  
+  render();
+  
+  }
