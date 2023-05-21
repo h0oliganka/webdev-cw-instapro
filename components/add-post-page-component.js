@@ -34,13 +34,12 @@ export function renderAddPostPageComponent({ appEl, onAddPostClick }) {
     });
 
     document.getElementById("add-button").addEventListener("click", () => {
-
-      if(document.querySelector('.textarea').value==''){
-        alert('Не заполнено описание фото');
-        return;
-      }
       if(document.querySelector('.file-upload-image')==null){
         alert('Добавьте фото');
+        return;
+      }
+      if(document.querySelector('.textarea').value==''){
+        alert('Не заполнено описание фото');
         return;
       }
       document.querySelector('.textarea').value = document.querySelector('.textarea').value.replaceAll("&", "&amp;")
